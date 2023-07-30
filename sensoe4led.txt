@@ -1,0 +1,65 @@
+long cm = 0;
+int ledr = 13;
+int ledv = 12;
+int leda = 11;
+int ledaz= 10;
+
+
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT); 
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  
+  return (pulseIn(echoPin, HIGH)*0.01723);
+  
+}
+
+void setup()
+{
+  pinMode(ledr, OUTPUT);
+  pinMode(ledv, OUTPUT);
+  pinMode(leda, OUTPUT);
+  pinMode(ledaz, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+   cm =readUltrasonicDistance(3, 2);
+
+  Serial.print(cm);
+  Serial.println("cm");
+  
+  if (cm > 300) {
+    digitalWrite(ledaz, HIGH);
+    digitalWrite(leda, LOW);
+    digitalWrite(ledv, LOW);
+    digitalWrite(ledr, LOW);
+  }
+  if (cm <= 300 && cm > 201) {
+    digitalWrite(leda, HIGH);
+    digitalWrite(ledv, LOW);
+    digitalWrite(ledr, LOW);
+    digitalWrite(ledaz, LOW);
+  }
+  if (cm <= 200 && cm > 100) {
+    digitalWrite(ledv, HIGH);
+    digitalWrite(ledr, LOW);
+    digitalWrite(leda, LOW);
+    digitalWrite(ledaz, LOW);
+  }
+  if (cm <= 100) {
+    digitalWrite(ledr, HIGH);
+    digitalWrite(ledv, LOW);
+    digitalWrite(leda, LOW);
+    digitalWrite(ledaz, LOW);
+  }
+
+  delay(100);
+}
